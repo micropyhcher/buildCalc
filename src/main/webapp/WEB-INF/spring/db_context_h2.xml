@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <!--для работы с проперти файлом (db_h2) -->
+    <context:property-placeholder location="classpath*:jdbc_h2.properties"/>
+
+    <!--включение @Transactional (db) -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <!--настройка источника данных (db_h2) -->
+    <!--смотреть настройки в jdbc_h2.properties-->
+    <!--встроенная база данных с предварительно засеченными полями (db) -->
+    <!--<jdbc:embedded-database id="dataSource" type="H2">-->
+    <!--<jdbc:script location="classpath*:db/createdb.sql"/>-->
+    <!--<jdbc:script location="classpath*:db/isert.sql"/>-->
+    <!--</jdbc:embedded-database>-->
+
+    <!--настройка подключения к базе данных (db_h2) -->
+    <bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource">
+        <property name="url" value="${jdbc.url}"/>
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="initialSize" value="${dbcp.initialSize}"/>
+        <property name="maxActive" value="${dbcp.maxActive}"/>
+    </bean>
+
+    <!--подключение менеджера транзакций (db_h2) -->
+    <!--<bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">-->
+    <!--<property name="sessionFactory" ref="sessionFactory"/>-->
+    <!--</bean>-->
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="emf"/>
+    </bean>
+
+    <!--подключение фабрики сессий гибернейта (db_h2)-->
+    <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="packagesToScan" value="by.tms.buildCalc.entity"/>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+                <prop key="hibernate.max_fetch_depth">3</prop>
+                <prop key="hibernate.jdbc.fetch_size">50</prop>
+                <prop key="hibernate.jdbc.batch_size">10</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">create-drop</prop> <!--схема и таблицы создадуться сами-->
+            </props>
+        </property>
+    </bean>
+
+    <!--подключаем декларативное управление кешем (db) -->
+    <!--<cache:annotation-driven/>-->
+
+    <!--менеджер кеша (db) -->
+    <!--<bean id="cacheManager" class="org.springframework.cache.concurrent.ConcurrentMapCacheManager"/>-->
+
+    <!--транслятор персистенс исключений (db) -->
+    <!--<bean id="exceptionTranslationPostProcessor"-->
+    <!--class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>-->
+
+</beans>

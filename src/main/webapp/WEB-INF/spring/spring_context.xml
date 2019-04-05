@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:c="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--(context)-->
+    <c:component-scan base-package="by.tms.buildCalc"/>
+
+    <!--подключение других файлов контекста(context)-->
+    <import resource="mvc_context.xml"/>
+    <import resource="db_context_sql.xml"/>
+
+    <!--обьявление перехватчиков (mvc/context) -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/cabinet"/>
+            <mvc:mapping path="/delform_currentuser"/>
+            <mvc:mapping path="/unlog"/>
+            <mvc:mapping path="/editform"/>
+            <ref bean="notGuestAccInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/logform"/>
+            <mvc:mapping path="/regstandart"/>
+            <mvc:mapping path="/regadmin"/>
+            <ref bean="guestAccInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/deluser"/>
+            <mvc:mapping path="/userlist"/>
+            <ref bean="adminAccInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

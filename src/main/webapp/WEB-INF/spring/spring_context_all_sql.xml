@@ -1,0 +1,97 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<beans xmlns="http://www.springframework.org/schema/beans"-->
+       <!--xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+       <!--xmlns:context="http://www.springframework.org/schema/context"-->
+       <!--xmlns:tx="http://www.springframework.org/schema/tx"-->
+       <!--xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:mvc="http://www.springframework.org/schema/mvc"-->
+       <!--xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">-->
+
+    <!--&lt;!&ndash;======================================================================&ndash;&gt;-->
+
+    <!--&lt;!&ndash;(context)&ndash;&gt;-->
+    <!--<context:component-scan base-package="by.tms.buildCalc"/>-->
+
+    <!--&lt;!&ndash;подключение других файлов контекста (context) &ndash;&gt;-->
+    <!--&lt;!&ndash;<import resource="mvc_context.xml"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;<import resource="db_context_sql.xml"/>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;=============================== MVC =======================================&ndash;&gt;-->
+
+    <!--&lt;!&ndash;обьявление перехватчиков (mvc/context) &ndash;&gt;-->
+    <!--<mvc:interceptors>-->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/log"/>-->
+            <!--<ref bean="logInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
+
+    <!--&lt;!&ndash;подключение декларативного управления mvc компонентами (mvc) &ndash;&gt;-->
+    <!--<mvc:annotation-driven/>-->
+
+    <!--&lt;!&ndash;подключенин и настройка арбитра представлений (mvc) &ndash;&gt;-->
+    <!--<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+        <!--<property name="prefix" value="/WEB-INF/pages/"/>-->
+        <!--<property name="suffix" value=".jsp"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash;=============================== DB =======================================&ndash;&gt;-->
+
+    <!--&lt;!&ndash;для работы с проперти файлом (db) &ndash;&gt;-->
+    <!--<context:property-placeholder location="classpath*:jdbc_sql.properties"/>-->
+
+    <!--&lt;!&ndash;включение @Transactional (db) &ndash;&gt;-->
+    <!--<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>-->
+
+    <!--&lt;!&ndash;настройка источника данных (db_sql) &ndash;&gt;-->
+    <!--&lt;!&ndash;смотреть настройки в jdbc_sql.properties&ndash;&gt;-->
+    <!--<bean class="org.apache.commons.dbcp.BasicDataSource" id="dbcpDataSource">-->
+        <!--<property name="url" value="${jdbc.url}"/>-->
+        <!--<property name="driverClassName" value="${jdbc.driverClassName}"/>-->
+        <!--<property name="username" value="${jdbc.username}"/>-->
+        <!--<property name="password" value="${jdbc.password}"/>-->
+        <!--<property name="initialSize" value="${dbcp.initialSize}"/>-->
+        <!--<property name="maxActive" value="${dbcp.maxActive}"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash;подключение менеджера транзакций (db) &ndash;&gt;-->
+    <!--&lt;!&ndash;<bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="sessionFactory" ref="sessionFactory"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;(db)&ndash;&gt;-->
+    <!--<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">-->
+        <!--<property name="entityManagerFactory" ref="emf"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash;подключение фабрики сессий гибернейта (db_sql) &ndash;&gt;-->
+    <!--<bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">-->
+        <!--<property name="dataSource" ref="dbcpDataSource"/>-->
+        <!--<property name="jpaVendorAdapter">-->
+            <!--<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>-->
+        <!--</property>-->
+        <!--<property name="packagesToScan" value="by.tms.buildCalc.entity"/>-->
+        <!--<property name="jpaProperties">-->
+            <!--<props>-->
+                <!--<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>-->
+                <!--<prop key="hibernate.max_fetch_depth">3</prop>-->
+                <!--<prop key="hibernate.jdbc.fetch_size">50</prop>-->
+                <!--<prop key="hibernate.jdbc.batch_size">10</prop>-->
+                <!--<prop key="hibernate.show_sql">true</prop>-->
+                <!--&lt;!&ndash;<prop key="hibernate.hbm2ddl.auto">create-drop</prop> &lt;!&ndash;схема и таблицы создадуться сами&ndash;&gt;&ndash;&gt;-->
+            <!--</props>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash;=============================== cache =======================================&ndash;&gt;-->
+
+    <!--&lt;!&ndash;подключение декларативного управления кешем (db) &ndash;&gt;-->
+    <!--&lt;!&ndash;<cache:annotation-driven/>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;менеджер кеша (db) &ndash;&gt;-->
+    <!--&lt;!&ndash;<bean id="cacheManager" class="org.springframework.cache.concurrent.ConcurrentMapCacheManager"/>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;транслятор персистенс исключений (db) &ndash;&gt;-->
+    <!--&lt;!&ndash;<bean id="exceptionTranslationPostProcessor"&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>&ndash;&gt;-->
+
+<!--</beans>-->
