@@ -1,13 +1,12 @@
 package by.tms.buildCalc.controller;
 
-import by.tms.buildCalc.entity.Constanta;
 import by.tms.buildCalc.entity.User;
-import by.tms.buildCalc.enums.UserRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import static by.tms.buildCalc.entity.Constanta.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,20 +19,14 @@ public class UserCabinetController {
 
         modelAndView.setViewName("userCabinet");
 
-        User userFromSession = (User) request.getSession().getAttribute(Constanta.userFromSession);
-        modelAndView.addObject(Constanta.userEntered,userFromSession);
-        modelAndView.addObject("userAllInfo",userFromSession.toStringMy());
+        User userFromSession = (User) request.getSession().getAttribute(USER_FROM_SESSION);
+        modelAndView.addObject(USER_ENTERED,userFromSession);
+        modelAndView.addObject("userAllInfo",userFromSession);
+        modelAndView.addObject("userRoleInfo",userFromSession.getRole());
+        modelAndView.addObject("userUnitsConnectorInfo", userFromSession.getUnitsConnector());
+        modelAndView.addObject("unitsInfo",userFromSession.getUnitsConnector().getUnit_1_list());
 
         return modelAndView;
     }
-
-//    @PostMapping // сюда даже не попадаем
-//    public ModelAndView userCabinetDo(ModelAndView modelAndView, HttpServletRequest request){
-//        modelAndView.setViewName("userCabinet");
-//        User userFromSession = (User) request.getSession().getAttribute("userFromSession");
-//        System.out.println("usercabinet - userFromSession" + userFromSession);
-//        modelAndView.addObject("userEntered",userFromSession);
-//        return modelAndView;
-//    }
 
 }

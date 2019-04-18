@@ -1,9 +1,6 @@
 package by.tms.buildCalc.controller;
 
-import by.tms.buildCalc.entity.Constanta;
-import by.tms.buildCalc.entity.Role;
 import by.tms.buildCalc.entity.User;
-import by.tms.buildCalc.enums.UserRoles;
 import by.tms.buildCalc.service.ControllerService;
 import by.tms.buildCalc.service.ImplUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+
+import static by.tms.buildCalc.entity.Constanta.*;
 
 @Controller
 @RequestMapping(path = "/regadmin")
@@ -32,13 +30,13 @@ public class UserRegisterController_AdminReg {
 	public ModelAndView registerAdminLobby(ModelAndView modelAndView) {
 		modelAndView.setViewName("userRegisterAddPass");
 
-		modelAndView.addObject(Constanta.userFrom_regForm_admin, new User());
+		modelAndView.addObject(USER_FROM_REG_FORM_ADMIN, new User());
 
 		return modelAndView;
 	}
 
 	@PostMapping
-	public ModelAndView registerAdminLobby(@Valid @ModelAttribute(Constanta.userFrom_regForm_admin) User userWithAdminPass,
+	public ModelAndView registerAdminLobby(@Valid @ModelAttribute(USER_FROM_REG_FORM_ADMIN) User userWithAdminPass,
 										   BindingResult bindingResult, ModelAndView modelAndView, HttpServletRequest request) {
 
 		modelAndView.setViewName("userRegisterAddPass");
@@ -51,7 +49,7 @@ public class UserRegisterController_AdminReg {
 
 		ControllerService bindingResultUtil = new ControllerService();
 		errorsList = bindingResultUtil.bindingResultErrorList(bindingResult);
-		modelAndView.addObject(Constanta.errorsList, errorsList);
+		modelAndView.addObject(ERRORS_LIST, errorsList);
 
 //		================================= ПРОШЛИ ВАЛИДАЦИЮ =========================================
 
@@ -67,13 +65,13 @@ public class UserRegisterController_AdminReg {
 			else{  // если сохранение не удалось (вернулось false), значит пользователь с введенными данными уже существует
 				modelAndView.setViewName("userRegisterLobby");
 				errorsList.add("Пользователь с таким E-Mail уже зарегистрирован в сиситеме");
-				modelAndView.addObject(Constanta.errorsList, errorsList);
+				modelAndView.addObject(ERRORS_LIST, errorsList);
 			}
 		}
 
 		else{
 			errorsList.add("Неверный пароль");
-			modelAndView.addObject(Constanta.errorsList, errorsList);
+			modelAndView.addObject(ERRORS_LIST, errorsList);
 		}
 
 		return modelAndView;

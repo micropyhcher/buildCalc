@@ -4,7 +4,7 @@
 <%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Переименование пользователя</title>
     <style>
         <%@include file="../css/bootstrap.min.css"%>
     </style>

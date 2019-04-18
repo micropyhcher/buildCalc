@@ -1,7 +1,6 @@
 package by.tms.buildCalc.entity.unit;
 
-//import by.tms.buildCalc.entity.CalcUnits;
-import by.tms.buildCalc.entity.User;
+import by.tms.buildCalc.entity.UnitsConnector;
 import by.tms.buildCalc.enums.Unit1Acrions;
 import lombok.Data;
 
@@ -10,7 +9,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "unit1")
-public class Unit1 {
+public class Unit1 implements Unit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +28,14 @@ public class Unit1 {
     @Column(name = "rez_exp_unit1")
     private String unit1_rez;
 
-//    @ManyToOne(targetEntity = CalcUnits.class) //(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-////    @JoinColumn(name = "unit_1_list")
-//    private CalcUnits calcUnits;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @ManyToOne //(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "unit_1_list")
+    private UnitsConnector unitsConnector;
+
+//    @ManyToOne
+////    @JoinColumn(name = "user_id")
+//    private User user;
 
     @Override
     public String toString() {
@@ -46,5 +46,10 @@ public class Unit1 {
                 ", b=" + b +
                 ", unit1_rez=" + unit1_rez +
                 '}';
+    }
+
+    @Override
+    public void unitName() {
+
     }
 }

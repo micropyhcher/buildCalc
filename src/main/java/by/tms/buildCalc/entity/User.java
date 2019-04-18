@@ -1,6 +1,5 @@
 package by.tms.buildCalc.entity;
 
-import by.tms.buildCalc.entity.unit.Unit1;
 import by.tms.buildCalc.enums.UserRoles;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
@@ -9,26 +8,25 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 @NamedQueries({
 		@NamedQuery(name = "User.findUserByEmailAndPass", query = "select u from User u where u.email = :email and u.pass = :pass"),
 		@NamedQuery(name = "User.findUserByEmail", query = "select u from User u where u.email = :email"),
 		@NamedQuery(name = "User.findAllUsers", query = "select u from User u")
 })
+//@SecondaryTables(@SecondaryTable(name = "nametable"))
 
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column (name = "USER_ID")
+	@Column //(name = "users_id")
 	private Long id;
 
-	@Column //(name = "name")
+	@Column //(table = "nametable") // (name = "name")
 //	@Pattern(regexp = "[/d]", message = "Вы ввели недопустимое имя")
 	@Size(min = 2, message = "Имя должно содержать не менее 2-х букв")
 	private String name;
@@ -46,7 +44,9 @@ public class User {
 	@Size(min = 3, max = 8, message = "Введите пароль от 3 до 8 символов")
 	private String pass; // основной пароль для авторизации пользователя
 
+
 	@Transient
+	@Column(name = "doublePass")
 	@Size(min = 3, max = 8, message = "Введите подтверждающий пароль от 3 до 8 символов")
 	private String doublePass; // пароль подьтверждения регистрации пользоваателя
 
@@ -65,11 +65,11 @@ public class User {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Role role; // ответвление к ролям
 
-//	@OneToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	private CalcUnits calcUnits; // ответвление к юнитам
+	@OneToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private UnitsConnector unitsConnector; // ответвление к юнитам
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-	private List<Unit1> unit1;
+//	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//	private List<Unit1> unit1list;
 
 
 	@Override
@@ -95,9 +95,9 @@ public class User {
 				", altPass='" + altPass + '\'' +
 				", newPass='" + newPass + '\'' +
 				", userRole=" + userRole + '\'' +
-//				", calcUnits=" + calcUnits + '\'' +
-				", unit1=" + unit1 +
-				", role=" + role +
+				", role=" + role + '\'' +
+				", unitsConnector=" + unitsConnector + '\'' +
+//				", unit1=" + unit1list +
 				'}';
 	}
 }

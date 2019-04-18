@@ -10,14 +10,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImplUnitService {
 
-//    @Autowired
-//    private DBUnitsRepository unitRepository;
+    @Autowired
+    private DBUserRepository userRepository;
 
     @Autowired
     private DBUnitsRepository unitRepository;
 
     public boolean saveUnit(Unit1 unitForSave){
         return unitRepository.saveUnit(unitForSave);
+    }
+
+    public boolean saveUserWithUnit(User userWithUnit){
+        return userRepository.editUser(userWithUnit);
     }
 
 }

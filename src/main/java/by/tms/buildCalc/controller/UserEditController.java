@@ -1,6 +1,5 @@
 package by.tms.buildCalc.controller;
 
-import by.tms.buildCalc.entity.Constanta;
 import by.tms.buildCalc.entity.User;
 import by.tms.buildCalc.service.ControllerService;
 import by.tms.buildCalc.service.ImplUserService;
@@ -12,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import static by.tms.buildCalc.entity.Constanta.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -30,16 +31,13 @@ public class UserEditController {
 
         modelAndView.setViewName("userEdit");
 
-        modelAndView.addObject(Constanta.userFrom_editForm,new User());
+        modelAndView.addObject(USER_FROM_EDIT_FORM,new User());
         return modelAndView;
     }
 
     @PostMapping
-    public ModelAndView editUserDo (@Valid @ModelAttribute(Constanta.userFrom_editForm) User userFromEditForm,
+    public ModelAndView editUserDo (@Valid @ModelAttribute(USER_FROM_EDIT_FORM) User userFromEditForm,
                                     BindingResult bindingResult, ModelAndView modelAndView, HttpServletRequest request){
-
-        System.out.println("--- 1 ---");
-
 
         modelAndView.setViewName("userEdit");
 
@@ -49,42 +47,29 @@ public class UserEditController {
 
         ControllerService bindingResultUtil = new ControllerService();
         errorsList = bindingResultUtil.bindingResultErrorList(bindingResult);
-        modelAndView.addObject(Constanta.errorsList, errorsList);
-
-        System.out.println("--- 2 ---");
+        modelAndView.addObject(ERRORS_LIST, errorsList);
 
 //		================================= ПРОШЛИ ВАЛИДАЦИЮ =========================================
 
-        User userFromSession = (User) request.getSession().getAttribute(Constanta.userFromSession);
-//        System.out.println(userFromSession);
+        User userFromSession = (User) request.getSession().getAttribute(USER_FROM_SESSION);
+//        System.out.println(USER_FROM_SESSION);
 //        System.out.println(userFromEditForm);
         Long userFromSessionId = userFromSession.getId();
         boolean isUserEdit = userService.editUser(userFromSession,userFromEditForm);
 
         if (isUserEdit){
 
-            System.out.println("--- 3 ---");
-
             User newUser = userService.getUserById(new User(),userFromSessionId);
-            request.getSession().setAttribute(Constanta.userFromSession, newUser);
-            request.getSession().setAttribute(Constanta.userFromSession_role, newUser.getRole().getUserRolesEntity());
-
-            System.out.println("--- 4 ---");
+            request.getSession().setAttribute(USER_FROM_SESSION, newUser);
+            request.getSession().setAttribute(USER_FROM_SESSION_ROLE, newUser.getRole().getUserRolesEntity());
 
             modelAndView.addObject("redirect:/");
         }else{
 
-            System.out.println("--- 5 ---");
-
             errorsList.add("Edit error");
-            modelAndView.addObject(Constanta.errorsList,errorsList);
-
-            System.out.println("--- 6 ---");
+            modelAndView.addObject(ERRORS_LIST,errorsList);
 
         }
-
-        System.out.println("--- 7 ---");
-
         return modelAndView;
     }
 

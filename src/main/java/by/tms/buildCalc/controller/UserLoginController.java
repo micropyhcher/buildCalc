@@ -1,6 +1,5 @@
 package by.tms.buildCalc.controller;
 
-import by.tms.buildCalc.entity.Constanta;
 import by.tms.buildCalc.entity.User;
 import by.tms.buildCalc.enums.UserRoles;
 import by.tms.buildCalc.service.ControllerService;
@@ -17,6 +16,8 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+import static by.tms.buildCalc.entity.Constanta.*;
+
 @Controller
 @RequestMapping(path = "/logform")
 public class UserLoginController {
@@ -29,12 +30,12 @@ public class UserLoginController {
 
 		modelAndView.setViewName("userLogin");
 
-		modelAndView.addObject(Constanta.userFrom_logForm, new User());
+		modelAndView.addObject(USER_FROM_LOG_FORM, new User());
 		return modelAndView;
 	}
 
 	@PostMapping
-	public ModelAndView userLoginDo(@Valid @ModelAttribute(name = Constanta.userFrom_logForm) User userFromLoginForm, BindingResult bindingResult,
+	public ModelAndView userLoginDo(@Valid @ModelAttribute(name = USER_FROM_LOG_FORM) User userFromLoginForm, BindingResult bindingResult,
 									ModelAndView modelAndView, HttpServletRequest request) {
 
 		modelAndView.setViewName("userLogin");
@@ -44,7 +45,7 @@ public class UserLoginController {
 
 		ControllerService bindingResultUtil = new ControllerService();
 		errorsList = bindingResultUtil.bindingResultErrorList(bindingResult);
-		modelAndView.addObject(Constanta.errorsList, errorsList);
+		modelAndView.addObject(ERRORS_LIST, errorsList);
 
 
 //		========================== ПРОШЛИ ВАЛИДАЦИЮ ===========================
@@ -54,7 +55,7 @@ public class UserLoginController {
 		if(userFromDB.getName() == null){
 			modelAndView.setViewName("userLogin");
 			errorsList.add("Email или пароль не верны");
-			modelAndView.addObject(Constanta.errorsList, errorsList);
+			modelAndView.addObject(ERRORS_LIST, errorsList);
 		}else{ // todo реализовать логин админовской записи через роли из БД
 
 //				========================== определяем роль пользователя в сессии ===========================
@@ -68,8 +69,8 @@ public class UserLoginController {
 				}
 			}
 //				=========================== сетим полученную роль в сессию ==================================
-			request.getSession().setAttribute(Constanta.userFromSession_role,userRole);
-			request.getSession().setAttribute(Constanta.userFromSession, userFromDB);
+			request.getSession().setAttribute(USER_FROM_SESSION_ROLE,userRole);
+			request.getSession().setAttribute(USER_FROM_SESSION, userFromDB);
 			modelAndView.setViewName("redirect:/");
 
 		}

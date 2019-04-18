@@ -21,8 +21,8 @@
         <spring:button>Удалить</spring:button>
     </spring:form>
 
-    <jstl:if test="${errorsList.size() > 0}">Ошибка введенных данных:</jstl:if>
-    <jstl:forEach items="${errorsList}" var="message">
+    <jstl:if test="${ERRORS_LIST.size() > 0}">Ошибка введенных данных:</jstl:if>
+    <jstl:forEach items="${ERRORS_LIST}" var="message">
         <li><jstl:out value="${message}"/></li>
     </jstl:forEach>
 

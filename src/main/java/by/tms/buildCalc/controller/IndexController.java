@@ -1,7 +1,5 @@
 package by.tms.buildCalc.controller;
 
-import by.tms.buildCalc.entity.Constanta;
-import by.tms.buildCalc.entity.Role;
 import by.tms.buildCalc.entity.User;
 import by.tms.buildCalc.enums.UserRoles;
 import org.apache.log4j.Logger;
@@ -9,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import static by.tms.buildCalc.entity.Constanta.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,67 +35,23 @@ public class IndexController {
 
 		modelAndView.setViewName("index");
 
-		UserRoles userFromSession_Role = (UserRoles) request.getSession().getAttribute(Constanta.userFromSession_role);
-		modelAndView.addObject(Constanta.userEntered_role,userFromSession_Role);
+		UserRoles userFromSession_Role = (UserRoles) request.getSession().getAttribute(USER_FROM_SESSION_ROLE);
+		modelAndView.addObject(USER_ENTERED_ROLE,userFromSession_Role);
 		if (userFromSession_Role == UserRoles.GUEST){
 			modelAndView.addObject("userEntered_Flag",false);
-			modelAndView.addObject(Constanta.userEntered,"Вы не авторизированы");
+			modelAndView.addObject(USER_ENTERED,"Вы не авторизированы");
 			logger.info("Enter guest");
 		}else{
-			User userFromSession = (User) request.getSession().getAttribute(Constanta.userFromSession);
+			User userFromSession = (User) request.getSession().getAttribute(USER_FROM_SESSION);
 
 			modelAndView.addObject("userEntered_Flag",true);
 			String userEntered = userFromSession.getName() + " [" + userFromSession.getEmail() + "]";
-			modelAndView.addObject(Constanta.userEntered, userEntered);
+			modelAndView.addObject(USER_ENTERED, userEntered);
 //			modelAndView.addObject("userFromSession_Role",userFromSession_Role);
 			logger.info("Enter " + userFromSession.getRole().getUserRolesEntity() + " : " + userFromSession.getName() + " | Email : " + userFromSession.getEmail() + " | id: " + userFromSession.getId());
 		}
 
 		return modelAndView;
 	}
-
-// =================================== for rev1 ===============================================
-//	@GetMapping
-//	public String index( ModelAndView modelAndView, HttpServletRequest request) {
-//		modelAndView.setViewName("index");
-////		========================== создание пустой сессии =============================
-//
-//		if (request.getSession().isNew()){
-//			request.getSession().setAttribute("userEnteredSession", new User());
-//		}
-//
-//	------------------------- проверка на то, залогинлся ли пользоваатель ------------------------------------
-////	?????
-//		return "index"; // ?????
-//	}
-//
-//	@GetMapping(path = "guest")
-//	public ModelAndView indexGuest(ModelAndView modelAndView, HttpServletRequest request) {
-//		modelAndView.setViewName("index_guest");
-//
-//		return modelAndView;
-//	}
-//
-//	@GetMapping(path = "user")
-//	public ModelAndView indexUser(ModelAndView modelAndView, HttpServletRequest request) {
-//		modelAndView.setViewName("index_user");
-//		User userFromSession = (User) request.getSession().getAttribute("userEnteredSession");
-//		if (userFromSession == null || userFromSession.equals(new User())){
-//			modelAndView.addObject("enteredUserFlag",false);
-//			modelAndView.addObject("enteredUser","Вы не авторизированы");
-//		}else{
-//			modelAndView.addObject("enteredUserFlag",true);
-//			modelAndView.addObject("enteredUser", userFromSession.getName() + " [" + userFromSession.getEmail() + "]");
-//		}
-//		return modelAndView;
-//	}
-//
-//	@GetMapping(path = "admin")
-//	public ModelAndView indexAdmin(ModelAndView modelAndView, HttpServletRequest request) {
-//		modelAndView.setViewName("index_admin");
-//		return modelAndView;
-//	}
-
-	// ==============================================================================================
 
 }

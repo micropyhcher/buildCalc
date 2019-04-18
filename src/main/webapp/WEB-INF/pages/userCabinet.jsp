@@ -4,7 +4,7 @@
 <%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>${userEntered.email}</title>
+    <title>${userAllInfo.email}</title>
     <style>
         <%@include file="../css/bootstrap.min.css"%>
     </style>
@@ -12,8 +12,7 @@
     <body>
 
         <div>
-            <jstl:out value="Вы вошли под именем: ${userEntered.name} | Email : ${userEntered.email}"/>
-            <jstl:out value="----${userAllInfo}"/>
+            <jstl:out value="Вы вошли под именем: ${userAllInfo.name} | Email : ${userAllInfo.email} | role : ${userRoleInfo.userRolesEntity}"/>
         </div>
 
         <form class="input-group" style="background: #0069d9">
@@ -23,6 +22,11 @@
             <input type="button" value="Удалить пользователя" onClick='location.href="${pageContext.request.contextPath}/delform_currentuser"'>
             <input type="button" value="Проба" onClick='location.href="${pageContext.request.contextPath}/unit1page"'>
         </form>
+
+        <div>
+            <jstl:out value="role : ${userRoleInfo}"/><br>
+            <jstl:out value="unitConnector : ${userUnitsConnectorInfo}"/>
+        </div>
 
     </body>
 </html>

@@ -13,7 +13,7 @@
 
 <div>
     <jstl:if test="${userEntered_Flag}">Вы вошли под именем: </jstl:if>
-    <jstl:out value="${userEntered}"/>
+    <jstl:out value="${USER_ENTERED}"/>
 
 </div>
 

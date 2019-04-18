@@ -19,7 +19,7 @@
     <jstl:if test="${!isUserListEmpty}">Список пользователей:</jstl:if>
     <jstl:if test="${isUserListEmpty}">Список пользователей пуст</jstl:if>
     <hr>
-    <jstl:forEach items="${userList}" var="userFromList">
+    <jstl:forEach items="${USER_LIST}" var="userFromList">
 
         <li><jstl:out value="${userFromList.name} | ${userFromList.email} ${userFromList.role.userRolesEntity} (${userFromList.id} ; ${userFromList.role.userRolesEntity})"/>
         <input type="button" value="Удалить" onclick='location.href="${pageContext.request.contextPath}/deluser/${userFromList.id}"'></li>

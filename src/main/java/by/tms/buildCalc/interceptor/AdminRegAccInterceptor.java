@@ -15,7 +15,7 @@
 //    @Override
 //    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //
-//        UserRoles userFromSession_Role = (UserRoles) request.getSession().getAttribute(Constanta.userFromSession_role);
+//        UserRoles userFromSession_Role = (UserRoles) request.getSession().getAttribute(Constanta.USER_FROM_SESSION_ROLE);
 ////    System.out.println("AdminRegInterceptor_preHandle_1");
 //
 //        if (userFromSession_Role != UserRoles.ADMIN){

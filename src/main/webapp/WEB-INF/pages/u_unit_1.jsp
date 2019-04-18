@@ -4,7 +4,7 @@
 <%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Unit1</title>
+    <title>UNIT1 : ${USER_FROM_SESSION}</title>
     <style>
         <%@include file="../css/bootstrap.min.css"%>
     </style>
@@ -21,7 +21,7 @@
         <spring:input path="b"/>
         <spring:button>Вычислить</spring:button>
     </spring:form>
-    <jstl:out value="${unit1list}"/>
-    <jstl:out value="${errorsList}"/>
+    <jstl:out value="${unit1rezult}"/>
+    <jstl:out value="${ERRORS_LIST}"/>
 </body>
 </html>

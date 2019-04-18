@@ -5,7 +5,7 @@
 <html>
 <html>
 <head>
-    <title>Title</title>
+    <title>Выход из учетной записи</title>
     <style>
         <%@include file="../css/bootstrap.min.css"%>
     </style>

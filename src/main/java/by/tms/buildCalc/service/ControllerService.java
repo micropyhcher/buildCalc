@@ -26,7 +26,7 @@ public class ControllerService {
         }
     }
 
-//    public List<ArrayList> userSaveService(UserService userService, User userFromRegForm, ModelAndView modelAndView, List<String> errorsList){
+//    public List<ArrayList> userSaveService(UserService userService, User userFromRegForm, ModelAndView modelAndView, List<String> ERRORS_LIST){
 //        List<Object> returnedList = new ArrayList<>();
 //        boolean isUserSaved = userService.saveUser(userFromRegForm); // записывыаем пользователя в БД включая роль
 //        if (isUserSaved == true) { // если сохранение прошло успешно (вернулось true)
@@ -34,11 +34,11 @@ public class ControllerService {
 //        }
 //        else{  // если сохранение не удалось (вернулось false), значит пользователь с введенными данными уже существует
 //            modelAndView.setViewName("userRegisterLobby");
-//            errorsList.add("Пользователь с таким E-Mail уже зарегистрирован в сиситеме");
-//            modelAndView.addObject(Constanta.errorsList, errorsList);
+//            ERRORS_LIST.add("Пользователь с таким E-Mail уже зарегистрирован в сиситеме");
+//            modelAndView.addObject(Constanta.ERRORS_LIST, ERRORS_LIST);
 //        }
 //        returnedList.add(modelAndView);
-//        returnedList.add(errorsList);
+//        returnedList.add(ERRORS_LIST);
 //        return returnedList;
 //    }
 

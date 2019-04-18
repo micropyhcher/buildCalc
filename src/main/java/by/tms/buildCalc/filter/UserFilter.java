@@ -1,12 +1,13 @@
 package by.tms.buildCalc.filter;
 
-import by.tms.buildCalc.entity.Constanta;
 import by.tms.buildCalc.entity.User;
 import by.tms.buildCalc.enums.UserRoles;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+
+import static by.tms.buildCalc.entity.Constanta.*;
 
 public class UserFilter implements Filter {
 
@@ -20,8 +21,8 @@ public class UserFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 //        System.out.println("userDoFilter_1");
         if (httpServletRequest.getSession().isNew()) {
-            httpServletRequest.getSession().setAttribute(Constanta.userFromSession, new User());
-            httpServletRequest.getSession().setAttribute(Constanta.userFromSession_role, UserRoles.GUEST);
+            httpServletRequest.getSession().setAttribute(USER_FROM_SESSION, new User());
+            httpServletRequest.getSession().setAttribute(USER_FROM_SESSION_ROLE, UserRoles.GUEST);
 //            System.out.println("userDoFilter_2");
         }
 //        System.out.println("userDoFilter_3");
