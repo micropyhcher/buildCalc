@@ -12,10 +12,10 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column //(name = "id")
+    @Column //(name = "id")
     private Long id;
 
-    @Column(name = "user_role")
+    @Column //(name = "user_role")
     private UserRoles userRolesEntity;
 
     @OneToOne(mappedBy = "role", fetch = FetchType.EAGER)

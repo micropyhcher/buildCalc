@@ -18,12 +18,14 @@
     <p>
     <spring:form modelAttribute="userFromRegForm" method="post" action="${pageContext.request.contextPath}/regstandart">
         Ваше имя: <spring:input path="name"/>
+
         Ваш возраст: <spring:input path="age"/>
         Ваш E-Mail: <spring:input path="email"/>
         Пароль: <spring:password path="pass"/>
         <spring:button>Зарегистрироваться</spring:button>
         <br>
         Зарегистрироваться как:<br>
+<%--        <spring:select path="userRole" items="${rolesList}"/><br>--%>
         стандартный пользователь: <spring:radiobutton path="userRole" value="${standartUserRole}"/><br>
         администратор: <spring:radiobutton path="userRole" value="${adminUserRole}"/><br>
 

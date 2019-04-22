@@ -17,7 +17,7 @@
 
 </div>
 
-<img src="${pageContext.request.contextPath}images/Logo.jpg" alt="Фон" style="alignment: center">
+<img src="images/Logo.png" alt="Фон" style="alignment: center">
 
     <form class="input-group" style="background: #0069d9">
         <jstl:if test="${userEntered_Role == 'GUEST'}">

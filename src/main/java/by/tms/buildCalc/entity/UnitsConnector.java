@@ -14,11 +14,11 @@ public class UnitsConnector {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "calc_units_id")
+//    @Column(name = "calc_units_id")
     private Long id;
 
-    @Column(name = "user_name")
-    private String userName;
+//    @Column(name = "userConnector_email")
+    private String userEmail;
 
     @OneToOne(mappedBy = "unitsConnector", fetch = FetchType.EAGER)
     private User user;
@@ -31,7 +31,7 @@ public class UnitsConnector {
     public String toString() {
         return "UnitsConnector{" +
                 "id=" + id +
-                ", userName='" + userName + '\'' +
+                ", userEmail='" + userEmail + '\'' +
                 '}';
     }
 }

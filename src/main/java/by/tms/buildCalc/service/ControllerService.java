@@ -1,10 +1,7 @@
 package by.tms.buildCalc.service;
 
-import by.tms.buildCalc.entity.Constanta;
-import by.tms.buildCalc.entity.User;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +22,5 @@ public class ControllerService {
             return new ArrayList<>();
         }
     }
-
-//    public List<ArrayList> userSaveService(UserService userService, User userFromRegForm, ModelAndView modelAndView, List<String> ERRORS_LIST){
-//        List<Object> returnedList = new ArrayList<>();
-//        boolean isUserSaved = userService.saveUser(userFromRegForm); // записывыаем пользователя в БД включая роль
-//        if (isUserSaved == true) { // если сохранение прошло успешно (вернулось true)
-//            modelAndView.setViewName("redirect:/");
-//        }
-//        else{  // если сохранение не удалось (вернулось false), значит пользователь с введенными данными уже существует
-//            modelAndView.setViewName("userRegisterLobby");
-//            ERRORS_LIST.add("Пользователь с таким E-Mail уже зарегистрирован в сиситеме");
-//            modelAndView.addObject(Constanta.ERRORS_LIST, ERRORS_LIST);
-//        }
-//        returnedList.add(modelAndView);
-//        returnedList.add(ERRORS_LIST);
-//        return returnedList;
-//    }
 
 }

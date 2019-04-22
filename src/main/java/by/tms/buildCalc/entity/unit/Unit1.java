@@ -25,7 +25,7 @@ public class Unit1 implements Unit {
     @Transient
     private Unit1Acrions action;
 
-    @Column(name = "rez_exp_unit1")
+    @Column //(name = "rez_exp_unit1")
     private String unit1_rez;
 
 

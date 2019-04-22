@@ -33,6 +33,12 @@ public class UserRegisterController_StandartUserReg {
 	@GetMapping
 	public ModelAndView registerUserLobby (ModelAndView modelAndView){
 		modelAndView.setViewName("userRegisterLobby");
+
+//		List<String> rolesList = new ArrayList<>();
+//		rolesList.add("USER");
+//		rolesList.add("ADMIN");
+//		modelAndView.addObject("rolesList",rolesList);
+
 		modelAndView.addObject(STANDART_USER_ROLE, UserRoles.USER);
         modelAndView.addObject(ADMIN_USER_ROLE, UserRoles.ADMIN);
 		modelAndView.addObject(USER_FROM_REG_FORM, new User());
@@ -43,80 +49,79 @@ public class UserRegisterController_StandartUserReg {
 	public ModelAndView registerUserDo (@Valid @ModelAttribute(USER_FROM_REG_FORM) User userFromRegForm,
                                             BindingResult bindingResult, ModelAndView modelAndView,
                                             HttpServletRequest request) {
-//        System.out.println("UserRegisterControllerLobby_1" + userFromRegForm); //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 
         modelAndView.setViewName("userRegisterLobby");
-
-//        System.out.println("userFromRegForm" + userFromRegForm + " ROLE " + userFromRegForm.getUserRole() + " CU " + userFromRegForm.getUnitsConnector());
-
 
 //		=================================== ВАЛИДАЦИЯ =============================================
 
         List<String> errorsList = new ArrayList<>();
 
-//        ControllerService controllerService = new ControllerService();
+//        ControllerService controllerService = new ControllerService(); // ============= НЕУДАЧНЫЙ МЕТОД ===========
 //        errorsList = controllerService.bindingResultErrorList(bindingResult);
-//        modelAndView.addObject(ERRORS_LIST, errorsList);
 
-        List<FieldError> timeErrorsList = new ArrayList<>();
+        if (bindingResult.hasErrors()){
+            List<FieldError> error = bindingResult.getFieldErrors();
 
-        if (bindingResult.hasErrors()) {
-            timeErrorsList = bindingResult.getFieldErrors();
+            for (int i = 0; i < error.size(); i++) {
+                errorsList.add(error.get(i).getDefaultMessage());
+            }
+            modelAndView.addObject(ERRORS_LIST, errorsList);
         }
 
-        System.out.println(timeErrorsList);
-
+        else {
 
 //		================================= ПРОШЛИ ВАЛИДАЦИЮ =========================================
 
 //        -=-=-=-=-=-=-=-=-=-=-=-=- Создание коннектора юнитов -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-        String userForRegisterName = userFromRegForm.getName();
-        UnitsConnector unitsConnectorConnectorInitializator = new UnitsConnector();
-        unitsConnectorConnectorInitializator.setUserName(userForRegisterName);
-        userFromRegForm.setUnitsConnector(unitsConnectorConnectorInitializator); // конеектору сетим юзера с ID что бы и коннектор имел ID
+            String userForRegisterEmail = userFromRegForm.getEmail();
+            UnitsConnector unitsConnectorInitializer = new UnitsConnector();
+            unitsConnectorInitializer.setUserEmail(userForRegisterEmail);
+            userFromRegForm.setUnitsConnector(unitsConnectorInitializer); // конеектору сетим email юзера с ID что бы и коннектор имел ID
 
 //        -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 //		========================== определяем роль пользователя из формы ===========================
 
-        Role userRoleForAdd = new Role(); // определяем роль пользователя из формы регистрации
-        for (UserRoles userRoleFromEnum : UserRoles.values()) {
-            if (userFromRegForm.getUserRole() != null && userFromRegForm.getUserRole().equals(userRoleFromEnum)) { // если в поле роли пользователя из формы есть роль и она совпадает с Enum то сетим ее
-                userRoleForAdd.setUserRolesEntity(userRoleFromEnum);
-                break;
-            } else { // если поле роли пользователя из формы пустое или не совпало со списком Enum то сетим стандартного пользователя
-                userRoleForAdd.setUserRolesEntity(UserRoles.USER);
-            }
-        }
+            Role userRoleForAdd = new Role(); // определяем роль пользователя из формы регистрации
 
-        userFromRegForm.setRole(userRoleForAdd); // ==== скорее всего на этом этапе ROLES получает ID / тут не так как с коннектором, тут юзеру сетим роль (уже с засеченным узером) (наоборот)====
+            if (userFromRegForm.getUserRole() == null){
+                userFromRegForm.setUserRole(UserRoles.USER);
+            }
+
+            for (UserRoles userRoleFromEnum : UserRoles.values()) {
+                if (userFromRegForm.getUserRole().equals(userRoleFromEnum)) { // если в поле роли пользователя из формы есть роль и она совпадает с Enum то сетим ее
+                    userRoleForAdd.setUserRolesEntity(userRoleFromEnum);
+                    break;
+                } else { // если поле роли пользователя из формы пустое или не совпало со списком Enum то сетим стандартного пользователя
+                    userRoleForAdd.setUserRolesEntity(UserRoles.USER);
+                }
+            }
+
+            userRoleForAdd.setUserRolesEntity(UserRoles.GUEST);
+            userFromRegForm.setRole(userRoleForAdd); // ==== скорее всего на этом этапе ROLES получает ID / тут не так как с коннектором, тут юзеру сетим роль (уже с засеченным узером) (наоборот)====
 
 //		========== сетим пользователя из формы в БД (если User, то тут, если ADMIN, по в админовской форме ===========
 
-        if (userFromRegForm.getRole().getUserRolesEntity().equals(UserRoles.USER)) { // если роль пользователя - стандартный пользователь, то регистрируем стандартного пользователя
+            if (userFromRegForm.getUserRole().equals(UserRoles.USER)) { // если роль пользователя - стандартный пользователь, то регистрируем стандартного пользователя
 
-            boolean isUserSaved = userService.saveUser(userFromRegForm); // записывыаем пользователя в БД включая роль
+                boolean isUserSaved = userService.saveUser(userFromRegForm); // записывыаем пользователя в БД включая роль
 
-            if (isUserSaved == true) { // если сохранение прошло успешно (вернулось true)
-                modelAndView.setViewName("redirect:/");
-            }
-            else{  // если сохранение не удалось (вернулось false), значит пользователь с введенными данными уже существует
-                modelAndView.setViewName("userRegisterLobby");
-                errorsList.add("Пользователь с таким E-Mail уже зарегистрирован в сиситеме");
+                if (isUserSaved == true) { // если сохранение прошло успешно (вернулось true)
+                    modelAndView.setViewName("redirect:/");
+                } else {  // если сохранение не удалось (вернулось false), значит пользователь с введенными данными уже существует
+                    modelAndView.setViewName("userRegisterLobby");
+                    errorsList.add("Пользователь с таким E-Mail уже зарегистрирован в сиситеме");
+                    modelAndView.addObject(ERRORS_LIST, errorsList);
+                    modelAndView.addObject("redirect:/regstandart");
+                }
+            } else { // если роль пользователя из формы не если регистрируем администратора
+
+                request.getSession().setAttribute("adminRegister", userFromRegForm);
                 modelAndView.addObject(ERRORS_LIST, errorsList);
+                modelAndView.setViewName("redirect:/regadmin");
             }
         }
-
-        else{ // если роль пользователя из формы не если регистрируем администратора
-
-            request.getSession().setAttribute("adminRegister",userFromRegForm);
-
-            modelAndView.setViewName("redirect:/regadmin");
-        }
-
         return modelAndView;
 	}
-
-
 }

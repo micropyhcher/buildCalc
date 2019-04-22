@@ -6,6 +6,7 @@ import by.tms.buildCalc.service.ImplUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,7 @@ public class UserRegisterController_AdminReg {
 	}
 
 	@PostMapping
-	public ModelAndView registerAdminLobby(@Valid @ModelAttribute(USER_FROM_REG_FORM_ADMIN) User userWithAdminPass,
+	public ModelAndView registerAdminLobby(@ModelAttribute(USER_FROM_REG_FORM_ADMIN) User userWithAdminPass,
 										   BindingResult bindingResult, ModelAndView modelAndView, HttpServletRequest request) {
 
 		modelAndView.setViewName("userRegisterAddPass");
@@ -47,33 +48,41 @@ public class UserRegisterController_AdminReg {
 
 		List<String> errorsList = new ArrayList<>();
 
-		ControllerService bindingResultUtil = new ControllerService();
-		errorsList = bindingResultUtil.bindingResultErrorList(bindingResult);
-		modelAndView.addObject(ERRORS_LIST, errorsList);
+//		ControllerService bindingResultUtil = new ControllerService(); // ============= НЕУДАЧНЫЙ МЕТОД ===========
+//		errorsList = bindingResultUtil.bindingResultErrorList(bindingResult);
+//		modelAndView.addObject(ERRORS_LIST, errorsList);
 
-//		================================= ПРОШЛИ ВАЛИДАЦИЮ =========================================
+		if (bindingResult.hasErrors()){
+			List<FieldError> error = bindingResult.getFieldErrors();
 
-		String adminPass = userWithAdminPass.getAltPass();
-
-		if (!adminPass.isEmpty() && adminPass.equals("99009900")){
-
-			boolean isUserSaved = userService.saveUser(adminUser); // записывыаем пользователя в БД включая роль
-
-			if (isUserSaved == true) { // если сохранение прошло успешно (вернулось true)
-				modelAndView.setViewName("redirect:/");
+			for (int i = 0; i < error.size(); i++) {
+				errorsList.add(error.get(i).getDefaultMessage());
 			}
-			else{  // если сохранение не удалось (вернулось false), значит пользователь с введенными данными уже существует
-				modelAndView.setViewName("userRegisterLobby");
-				errorsList.add("Пользователь с таким E-Mail уже зарегистрирован в сиситеме");
-				modelAndView.addObject(ERRORS_LIST, errorsList);
-			}
-		}
-
-		else{
-			errorsList.add("Неверный пароль");
 			modelAndView.addObject(ERRORS_LIST, errorsList);
 		}
 
+		else {
+
+//		================================= ПРОШЛИ ВАЛИДАЦИЮ =========================================
+
+			String adminPass = userWithAdminPass.getAltPass();
+
+			if (!adminPass.isEmpty() && adminPass.equals("99009900")) {
+
+				boolean isUserSaved = userService.saveUser(adminUser); // записывыаем пользователя в БД включая роль
+
+				if (isUserSaved == true) { // если сохранение прошло успешно (вернулось true)
+					modelAndView.setViewName("redirect:/");
+				} else {  // если сохранение не удалось (вернулось false), значит пользователь с введенными данными уже существует
+					modelAndView.setViewName("userRegisterLobby");
+					errorsList.add("Пользователь с таким E-Mail уже зарегистрирован в сиситеме");
+					modelAndView.addObject(ERRORS_LIST, errorsList);
+				}
+			} else {
+				errorsList.add("Неверный пароль");
+				modelAndView.addObject(ERRORS_LIST, errorsList);
+			}
+		}
 		return modelAndView;
 	}
 }

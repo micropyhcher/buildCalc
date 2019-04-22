@@ -23,43 +23,40 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column //(name = "users_id")
+	@Column //(name = "user_id")
 	private Long id;
 
-	@Column //(table = "nametable") // (name = "name")
-//	@Pattern(regexp = "[/d]", message = "Вы ввели недопустимое имя")
+	@Column //(name = "user_name") //(table = "nametable")
 	@Size(min = 2, message = "Имя должно содержать не менее 2-х букв")
 	private String name;
 
-	@Column //(name = "age")
+	@Column //(name = "user_age")
 	@Max(value = 60, message = "Возраст должен быть не более 60")
 	@Min(value = 10, message = "Возраст должен быть не ненее 10")
 	private Integer age;
 
-	@Column //(name = "email", unique = true)
+	@Column //(name = "user_email", unique = true)
 	@Email(message = "Введите вашу электронную почту")
 	private String email;
 
-	@Column //(name = "pass")
+	@Column //(name = "user_pass")
 	@Size(min = 3, max = 8, message = "Введите пароль от 3 до 8 символов")
 	private String pass; // основной пароль для авторизации пользователя
 
 
 	@Transient
-	@Column(name = "doublePass")
-	@Size(min = 3, max = 8, message = "Введите подтверждающий пароль от 3 до 8 символов")
+//	@Size(min = 3, max = 8, message = "Введите подтверждающий пароль от 3 до 8 символов")
 	private String doublePass; // пароль подьтверждения регистрации пользоваателя
 
 	@Transient
-	@Size(min = 3, max = 8, message = "Введите административный пароль от 3 до 8 символов")
+//	@Size(min = 3, max = 8, message = "Введите административный пароль от 3 до 8 символов")
 	private String altPass; // пароль для регистрации административных ролей пользователя
 
 	@Transient
-	@Size(min = 3, max = 8, message = "Введите новый пароль от 3 до 8 символов")
+//	@Size(min = 3, max = 8, message = "Введите новый пароль от 3 до 8 символов")
 	private String newPass; // новый пароль при смене пароля пользователя
 
 	@Transient // не сохраняет поле в БД
-//	@Pattern(regexp = "ADMIN", message = "Неподходящее значение")
 	private UserRoles userRole; // временный ключ при регистрации роли пользоваателя
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -67,9 +64,6 @@ public class User {
 
 	@OneToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private UnitsConnector unitsConnector; // ответвление к юнитам
-
-//	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//	private List<Unit1> unit1list;
 
 
 	@Override
@@ -84,20 +78,20 @@ public class User {
 	}
 
 
-	public String toStringMy() {
-		return "User{" +
-				"id=" + id + '\'' +
-				", name='" + name + '\'' +
-				", age=" + age + '\'' +
-				", email='" + email + '\'' +
-				", pass='" + pass + '\'' +
-				", doublePass='" + doublePass + '\'' +
-				", altPass='" + altPass + '\'' +
-				", newPass='" + newPass + '\'' +
-				", userRole=" + userRole + '\'' +
-				", role=" + role + '\'' +
-				", unitsConnector=" + unitsConnector + '\'' +
-//				", unit1=" + unit1list +
-				'}';
-	}
+//	public String toStringMy() {
+//		return "User{" +
+//				"id=" + id + '\'' +
+//				", name='" + name + '\'' +
+//				", age=" + age + '\'' +
+//				", email='" + email + '\'' +
+//				", pass='" + pass + '\'' +
+//				", doublePass='" + doublePass + '\'' +
+//				", altPass='" + altPass + '\'' +
+//				", newPass='" + newPass + '\'' +
+//				", userRole=" + userRole + '\'' +
+//				", role=" + role + '\'' +
+//				", unitsConnector=" + unitsConnector + '\'' +
+////				", unit1=" + unit1list +
+//				'}';
+//	}
 }
