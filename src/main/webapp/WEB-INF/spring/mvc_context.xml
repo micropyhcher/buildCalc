@@ -9,10 +9,17 @@
     <mvc:annotation-driven/>
 
     <!--подключение и настройка арбитра представлений (mvc) -->
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <bean id="viewResolver1" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
+<!--        <property name="order" value="0"/>-->
     </bean>
+
+<!--    <bean id="viewResolver2" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+<!--        <property name="prefix" value="/WEB-INF/pages/units"/>-->
+<!--        <property name="suffix" value=".jsp"/>-->
+<!--        <property name="order" value="1"/>-->
+<!--    </bean>-->
 
     <!--<bean id="unitsViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
         <!--<property name="prefix" value="/WEB-INF/pages/units/"/>-->

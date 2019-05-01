@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import static by.tms.buildCalc.entity.Constanta.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping(path = "/unit1page")
@@ -28,6 +29,7 @@ public class Unit1Controller {
 
         modelAndView.setViewName("u_unit_1");
 
+//        List<String>
         modelAndView.addObject("unit1form", new Unit1());
         return modelAndView;
     }

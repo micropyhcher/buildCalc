@@ -7,6 +7,7 @@ import by.tms.buildCalc.service.ImplUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,37 +44,54 @@ public class UserLoginController {
 //		============================= ВАЛИДАЦИЯ ===============================
 		List<String> errorsList = new ArrayList<>();
 
-		ControllerService bindingResultUtil = new ControllerService();
-		errorsList = bindingResultUtil.bindingResultErrorList(bindingResult);
-		modelAndView.addObject(ERRORS_LIST, errorsList);
+//		ControllerService bindingResultUtil = new ControllerService();
+//		errorsList = bindingResultUtil.bindingResultErrorList(bindingResult);
+//		modelAndView.addObject(ERRORS_LIST, errorsList);
+
+		if (bindingResult.hasErrors()){
+			List<FieldError> error = bindingResult.getFieldErrors();
+
+			for (int i = 0; i < error.size(); i++) {
+				errorsList.add(error.get(i).getDefaultMessage());
+			}
+			modelAndView.addObject(ERRORS_LIST, errorsList);
+		}
+
+		else {
+
 
 
 //		========================== ПРОШЛИ ВАЛИДАЦИЮ ===========================
 
 
-		User userFromDB = userService.getUser(userFromLoginForm);
-		if(userFromDB.getName() == null){
-			modelAndView.setViewName("userLogin");
-			errorsList.add("Email или пароль не верны");
-			modelAndView.addObject(ERRORS_LIST, errorsList);
-		}else{ // todo реализовать логин админовской записи через роли из БД
+			User userFromDB = userService.getUser(userFromLoginForm);
+
+			if(userFromDB.getName() == null){
+				modelAndView.setViewName("userLogin");
+				errorsList.add("Email или пароль не верны");
+				modelAndView.addObject(ERRORS_LIST, errorsList);
+			}else{ // todo реализовать логин админовской записи через роли из БД
 
 //				========================== определяем роль пользователя в сессии ===========================
-			UserRoles userRole = null;
-			for (UserRoles userRoleFromEnum : UserRoles.values()) {
-				if (userFromDB.getRole().getUserRolesEntity().equals(userRoleFromEnum)){
-					userRole = userRoleFromEnum;
-					break;
-				}else {
-					userRole = UserRoles.GUEST;
+				UserRoles userRole = null;
+				for (UserRoles userRoleFromEnum : UserRoles.values()) {
+					if (userFromDB.getRole().getUserRolesEntity().equals(userRoleFromEnum)){
+						userRole = userRoleFromEnum;
+						break;
+					}
+					else {
+						userRole = UserRoles.GUEST;
+					}
 				}
-			}
-//				=========================== сетим полученную роль в сессию ==================================
-			request.getSession().setAttribute(USER_FROM_SESSION_ROLE,userRole);
-			request.getSession().setAttribute(USER_FROM_SESSION, userFromDB);
-			modelAndView.setViewName("redirect:/");
 
+//				=========================== сетим полученную роль в сессию ==================================
+				request.getSession().setAttribute(USER_FROM_SESSION_ROLE,userRole);
+				request.getSession().setAttribute(USER_FROM_SESSION, userFromDB);
+				modelAndView.setViewName("redirect:/");
+
+			}
 		}
+
 		return modelAndView;
 	}
 }

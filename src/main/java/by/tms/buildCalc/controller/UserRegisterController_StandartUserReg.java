@@ -98,7 +98,8 @@ public class UserRegisterController_StandartUserReg {
                 }
             }
 
-            userRoleForAdd.setUserRolesEntity(UserRoles.GUEST);
+//            userRoleForAdd.setUserRolesEntity(UserRoles.GUEST); //===============
+
             userFromRegForm.setRole(userRoleForAdd); // ==== скорее всего на этом этапе ROLES получает ID / тут не так как с коннектором, тут юзеру сетим роль (уже с засеченным узером) (наоборот)====
 
 //		========== сетим пользователя из формы в БД (если User, то тут, если ADMIN, по в админовской форме ===========
